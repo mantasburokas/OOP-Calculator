@@ -1,24 +1,13 @@
-﻿using System;
-using System.ComponentModel;
-using Calculator.Operations.Factories.Interfaces;
+﻿using Calculator.Operations.Factories.Interfaces;
 using Calculator.Operations.Helpers;
 using Calculator.Operations.Interfaces;
+using System;
+using System.ComponentModel;
 
 namespace Calculator.Operations.Factories
 {
     public sealed class OperationFactory : IOperationFactory
     {
-        private static IOperationFactory _instance;
-
-        private OperationFactory()
-        {
-        }
-
-        public static IOperationFactory GetInstance()
-        {
-            return _instance ?? (_instance = new OperationFactory());
-        }
-
         public IOperation CreateOperation(OperationTypes operationType)
         {
             if (!Enum.IsDefined(typeof(OperationTypes), operationType))

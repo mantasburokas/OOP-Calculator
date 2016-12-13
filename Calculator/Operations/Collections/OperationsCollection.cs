@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Calculator.Operations.Collections.Interfaces;
-using Calculator.Operations.Factories;
+﻿using Calculator.Operations.Collections.Interfaces;
 using Calculator.Operations.Factories.Interfaces;
 using Calculator.Operations.Helpers;
 using Calculator.Operations.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Calculator.Operations.Collections
 {
@@ -15,10 +14,16 @@ namespace Calculator.Operations.Collections
 
         private readonly IOperationFactory _operationFactory;
 
-        public OperationsCollection()
+        public OperationsCollection(IOperationFactory operationFactory)
         {
+            if (operationFactory == null)
+            {
+                throw new ArgumentNullException(nameof(operationFactory));
+            }
+
             _operations = new Dictionary<OperationTypes, IOperation>();
-            _operationFactory = OperationFactory.GetInstance();
+
+            _operationFactory = operationFactory;
         }
 
         public IOperation GetOperation(OperationTypes operationType)

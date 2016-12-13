@@ -3,10 +3,8 @@ using Calculator.Results.Mementos.Interfaces;
 
 namespace Calculator.Results
 {
-    public sealed class ResultsCaretaker : IResultsCaretaker
+    public class ResultsCaretaker : IResultsCaretaker
     {
-        private static IResultsCaretaker _instance;
-
         private IResultMemento _resultMemento;
 
         public IResultMemento ResultMemento
@@ -28,15 +26,6 @@ namespace Calculator.Results
             {
                 _resultMemento = value;
             }
-        }
-
-        private ResultsCaretaker()
-        {    
-        }
-
-        public static IResultsCaretaker GetInstance()
-        {
-            return _instance ?? (_instance = new ResultsCaretaker());
         }
     }
 }

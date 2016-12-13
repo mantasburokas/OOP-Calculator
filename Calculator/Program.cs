@@ -1,6 +1,12 @@
-﻿using System;
-using Calculator.Operations.Collections;
+﻿using Calculator.Operations.Collections;
+using Calculator.Operations.Collections.Interfaces;
+using Calculator.Operations.Factories;
+using Calculator.Operations.Factories.Interfaces;
 using Calculator.Operations.Helpers;
+using Calculator.Results;
+using Calculator.Results.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using static System.Console;
 
 namespace Calculator
@@ -9,7 +15,9 @@ namespace Calculator
     {
         static void Main(string[] arguments)
         {
-            var calculator = new Calculator(new OperationsCollection());
+            var services = ConfigureServices();
+
+            var calculator = services.GetService<ICalculator>();
 
             do
             {
@@ -21,7 +29,7 @@ namespace Calculator
                 {
                     var commands = input.Split(' ');
 
-                    var operationType = (OperationTypes) Enum.Parse(typeof(OperationTypes), commands[0]);
+                    var operationType = (OperationTypes)Enum.Parse(typeof(OperationTypes), commands[0]);
 
                     if (commands[0] == OperationTypes.Undo.ToString())
                     {
@@ -56,6 +64,19 @@ namespace Calculator
                 }
 
             } while (ReadKey(true).Key != ConsoleKey.N);
+        }
+
+        static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            services
+                .AddSingleton<ICalculator, Calculator>()
+                .AddSingleton<IOperationsCollection, OperationsCollection>()
+                .AddSingleton<IOperationFactory, OperationFactory>()
+                .AddSingleton<IResultsCaretaker, ResultsCaretaker>();
+
+            return services.BuildServiceProvider();
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using Calculator.Operations.Collections.Interfaces;
+﻿using Calculator.Operations.Collections.Interfaces;
 using Calculator.Operations.Helpers;
 using Calculator.Results;
 using Calculator.Results.Interfaces;
+using System;
+using System.ComponentModel;
 
 namespace Calculator
 {
@@ -19,11 +19,21 @@ namespace Calculator
 
         private IResult _result;
 
-        public Calculator(IOperationsCollection operationsCollection)
+        public Calculator(IOperationsCollection operationsCollection, IResultsCaretaker resultsCaretaker)
         {
+            if (operationsCollection == null)
+            {
+                throw new ArgumentNullException(nameof(operationsCollection));
+            }
+
+            if (resultsCaretaker == null)
+            {
+                throw new ArgumentNullException(nameof(resultsCaretaker));
+            }
+
             _operationsCollection = operationsCollection;
 
-            _resultsCaretaker = ResultsCaretaker.GetInstance();
+            _resultsCaretaker = resultsCaretaker;
         }
 
         public double Calculate(OperationTypes operationType, double x, double y)
@@ -37,7 +47,7 @@ namespace Calculator
 
             _resultsCaretaker.ResultMemento = _result?.SaveResult();
 
-            _result = new Result {Value = operation.Calculate(x, y)};
+            _result = new Result { Value = operation.Calculate(x, y) };
 
             return _result.Value;
         }
@@ -88,7 +98,7 @@ namespace Calculator
 
             _result.Value = memento.Value;
 
-            return memento.Value;
+            return _result.Value;
         }
     }
 }
