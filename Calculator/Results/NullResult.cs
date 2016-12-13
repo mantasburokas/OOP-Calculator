@@ -4,13 +4,13 @@ using Calculator.Results.Mementos.Interfaces;
 
 namespace Calculator.Results
 {
-    public class Result : IResult
+    public class NullResult : IResult
     {
         public double Value { get; set; }
 
         public bool IsNull()
         {
-            return false;
+            return true;
         }
 
         public IResultMemento SaveResult()
@@ -21,6 +21,6 @@ namespace Calculator.Results
         public void RestoreResult(IResultMemento memento)
         {
             Value = memento.Value;
-        } 
+        }
     }
 }

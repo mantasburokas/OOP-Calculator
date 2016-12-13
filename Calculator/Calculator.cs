@@ -1,6 +1,5 @@
 ﻿using Calculator.Operations.Collections.Interfaces;
 using Calculator.Operations.Helpers;
-using Calculator.Results;
 using Calculator.Results.Interfaces;
 using System;
 using System.ComponentModel;
@@ -36,30 +35,27 @@ namespace Calculator
             _resultsCaretaker = resultsCaretaker;
         }
 
-        public double Calculate(OperationTypes operationType, double x, double y)
+        public IResult Calculate(OperationTypes operationType, double x, double y)
         {
-            if (!Enum.IsDefined(typeof(OperationTypes), operationType))
-            {
-                throw new InvalidEnumArgumentException(nameof(operationType));
-            }
-
             var operation = _operationsCollection.GetOperation(operationType);
 
             _resultsCaretaker.ResultMemento = _result?.SaveResult();
 
-            _result = new Result { Value = operation.Calculate(x, y) };
+            var result = operation.Calculate(x, y);
 
-            return _result.Value;
+            _result = result;
+
+            return result;
         }
 
-        public double Calculate(OperationTypes operationType, string side, double value)
+        public IResult Calculate(OperationTypes operationType, string side, double value)
         {
             if (_result == null)
             {
                 throw new ArgumentException("Next time input numbers first, then use result");
             }
 
-            double result;
+            IResult result;
 
             if (side == ResultLeftSide)
             {
@@ -77,7 +73,7 @@ namespace Calculator
             return result;
         }
 
-        public double Calculate(OperationTypes operationType)
+        public IResult Calculate(OperationTypes operationType)
         {
             if (_result == null)
             {
@@ -87,7 +83,7 @@ namespace Calculator
             return Calculate(operationType, _result.Value, _result.Value);
         }
 
-        public double Undo()
+        public IResult Undo()
         {
             var memento = _resultsCaretaker.ResultMemento;
 
@@ -98,7 +94,7 @@ namespace Calculator
 
             _result.Value = memento.Value;
 
-            return _result.Value;
+            return _result;
         }
     }
 }

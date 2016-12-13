@@ -6,6 +6,8 @@ namespace Calculator.Results.Interfaces
     {
         double Value { get; set; }
 
+        bool IsNull();
+
         IResultMemento SaveResult();
 
         void RestoreResult(IResultMemento memento);

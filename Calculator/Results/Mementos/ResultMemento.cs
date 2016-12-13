@@ -1,4 +1,5 @@
-﻿using Calculator.Results.Mementos.Interfaces;
+﻿using Calculator.Results.Interfaces;
+using Calculator.Results.Mementos.Interfaces;
 
 namespace Calculator.Results.Mementos
 {
@@ -6,7 +7,7 @@ namespace Calculator.Results.Mementos
     {
         public double Value { get; }
 
-        public ResultMemento(Result result)
+        public ResultMemento(IResult result)
         {
             Value = result.Value;
         }

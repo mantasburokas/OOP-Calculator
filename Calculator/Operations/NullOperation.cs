@@ -4,16 +4,16 @@ using Calculator.Results.Interfaces;
 
 namespace Calculator.Operations
 {
-    public class SubtractionOperation : IOperation
+    public class NullOperation : IOperation
     {
         public IResult Calculate(double x, double y)
         {
-            return new Result { Value = x - y };
+            return new NullResult { Value = double.MinValue };
         }
 
         public bool IsNull()
         {
-            return false;
+            return true;
         }
     }
 }

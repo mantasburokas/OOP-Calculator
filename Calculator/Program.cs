@@ -7,7 +7,6 @@ using Calculator.Results;
 using Calculator.Results.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using static System.Console;
 
 namespace Calculator
 {
@@ -21,35 +20,44 @@ namespace Calculator
 
             do
             {
-                WriteLine("[operation type] [x] [y]");
+                Console.WriteLine("[operation type] [x] [y]");
 
-                var input = ReadLine();
+                var input = Console.ReadLine();
 
                 if (input != null)
                 {
                     var commands = input.Split(' ');
 
-                    var operationType = (OperationTypes)Enum.Parse(typeof(OperationTypes), commands[0]);
+                    OperationTypes operationType;
+
+                    var isDefined = Enum.TryParse(commands[0], true, out operationType);
+
+                    if (!isDefined)
+                    {
+                        operationType = OperationTypes.Undefined; ;
+                    }
+
+                    IResult result = null;
 
                     if (commands[0] == OperationTypes.Undo.ToString())
                     {
-                        WriteLine($"Previous result value: {calculator.Undo()}");
+                        result = calculator.Undo();
                     }
                     else if (commands[1] == "Result" && commands[2] == "Result")
                     {
-                        WriteLine($"Result: {calculator.Calculate(operationType)}");
+                        result = calculator.Calculate(operationType);
                     }
                     else if (commands[1] == "Result")
                     {
                         var value = double.Parse(commands[2]);
 
-                        WriteLine($"Result: {calculator.Calculate(operationType, "Left", value)}");
+                        result = calculator.Calculate(operationType, "Left", value);
                     }
                     else if (commands[2] == "Result")
                     {
                         var value = double.Parse(commands[1]);
 
-                        WriteLine($"Result: {calculator.Calculate(operationType, "Right", value)}");
+                        result = calculator.Calculate(operationType, "Right", value);
                     }
                     else if (commands[1] != "Result" && commands[2] != "Result")
                     {
@@ -57,16 +65,23 @@ namespace Calculator
 
                         var y = double.Parse(commands[2]);
 
-                        WriteLine($"Result: {calculator.Calculate(operationType, x, y)}");
+                        result = calculator.Calculate(operationType, x, y);
                     }
 
-                    WriteLine("Continue? y/n");
+                    if (result == null)
+                    {
+                        throw new ArgumentNullException();
+                    }
+
+                    Console.WriteLine(result.IsNull() ? "Unsupported operation" : $"Result: {result.Value}");
+
+                    Console.WriteLine("Continue? y/n");
                 }
 
-            } while (ReadKey(true).Key != ConsoleKey.N);
+            } while (Console.ReadKey(true).Key != ConsoleKey.N);
         }
 
-        static IServiceProvider ConfigureServices()
+        private static IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
 

@@ -67,6 +67,7 @@
     <Compile Include="Operations\Collections\OperationsCollection.cs" />
     <Compile Include="Operations\AdditionOperation.cs" />
     <Compile Include="Operations\DivisionOperation.cs" />
+    <Compile Include="Operations\NullOperation.cs" />
     <Compile Include="Results\Interfaces\IResult.cs" />
     <Compile Include="Results\Interfaces\IResultsCaretaker.cs" />
     <Compile Include="Results\Mementos\Interfaces\IResultMemento.cs" />
@@ -77,12 +78,12 @@
     <Compile Include="Operations\Helpers\OperationTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\NullResult.cs" />
     <Compile Include="Results\Result.cs" />
     <Compile Include="Results\ResultsCaretaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,6 +8,8 @@
         Division,
         Modulus,
 
-        Undo
+        Undo,
+
+        Undefined
     }
 }

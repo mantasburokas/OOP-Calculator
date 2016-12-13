@@ -1,8 +1,6 @@
 ﻿using Calculator.Operations.Factories.Interfaces;
 using Calculator.Operations.Helpers;
 using Calculator.Operations.Interfaces;
-using System;
-using System.ComponentModel;
 
 namespace Calculator.Operations.Factories
 {
@@ -10,10 +8,6 @@ namespace Calculator.Operations.Factories
     {
         public IOperation CreateOperation(OperationTypes operationType)
         {
-            if (!Enum.IsDefined(typeof(OperationTypes), operationType))
-            {
-                throw new InvalidEnumArgumentException(nameof(operationType));
-            }
 
             IOperation newOperation = null;
 
@@ -33,6 +27,9 @@ namespace Calculator.Operations.Factories
                     break;
                 case OperationTypes.Modulus:
                     newOperation = new ModulusOperation();
+                    break;
+                case OperationTypes.Undefined:
+                    newOperation = new NullOperation();
                     break;
             }
 

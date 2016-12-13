@@ -1,15 +1,16 @@
 ﻿using Calculator.Operations.Helpers;
+using Calculator.Results.Interfaces;
 
 namespace Calculator
 {
     public interface ICalculator
     {
-        double Calculate(OperationTypes operationType, double x, double y);
+        IResult Calculate(OperationTypes operationType, double x, double y);
 
-        double Calculate(OperationTypes operationType, string side, double value);
+        IResult Calculate(OperationTypes operationType, string side, double value);
 
-        double Calculate(OperationTypes operationType);
+        IResult Calculate(OperationTypes operationType);
 
-        double Undo();
+        IResult Undo();
     }
 }
