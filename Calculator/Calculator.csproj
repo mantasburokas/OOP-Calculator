@@ -62,8 +62,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculations\CalculationResultResult.cs" />
+    <Compile Include="Calculations\CalculationResultY.cs" />
+    <Compile Include="Calculations\CalculationUndo.cs" />
+    <Compile Include="Calculations\CalculationXResult.cs" />
+    <Compile Include="Calculations\CalculationXY.cs" />
     <Compile Include="Calculator.cs" />
     <Compile Include="ConsoleAdapter.cs" />
+    <Compile Include="Calculations\Calculation.cs" />
     <Compile Include="ICalculator.cs" />
     <Compile Include="IConsoleAdapter.cs" />
     <Compile Include="Operations\Factories\Interfaces\IOperationFactory.cs" />
@@ -74,6 +80,7 @@
     <Compile Include="Operations\AdditionOperation.cs" />
     <Compile Include="Operations\DivisionOperation.cs" />
     <Compile Include="Operations\NullOperation.cs" />
+    <Compile Include="Calculations\Models\Request.cs" />
     <Compile Include="Results\Interfaces\IResult.cs" />
     <Compile Include="Results\Interfaces\IResultsCaretaker.cs" />
     <Compile Include="Results\Mementos\Interfaces\IResultMemento.cs" />
@@ -92,6 +99,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

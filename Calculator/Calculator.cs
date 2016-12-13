@@ -3,21 +3,21 @@ using Calculator.Operations.Helpers;
 using Calculator.Results.Interfaces;
 using System;
 using System.ComponentModel;
+using Calculator.Calculations;
+using Calculator.Calculations.Models;
 using Calculator.Results;
 
 namespace Calculator
 {
     public class Calculator : ICalculator
     {
-        private const string ResultRightSide = "Right";
+        public IOperationsCollection OperationsCollection { get; }
 
-        private const string ResultLeftSide = "Left";
+        public IResultsCaretaker ResultsCaretaker { get; }
 
-        private readonly IOperationsCollection _operationsCollection;
+        public IResult Result { get; }
 
-        private readonly IResultsCaretaker _resultsCaretaker;
-
-        private IResult _result;
+        private readonly Calculation _calculation;
 
         public Calculator(IOperationsCollection operationsCollection, IResultsCaretaker resultsCaretaker)
         {
@@ -31,73 +31,29 @@ namespace Calculator
                 throw new ArgumentNullException(nameof(resultsCaretaker));
             }
 
-            _operationsCollection = operationsCollection;
+            OperationsCollection = operationsCollection;
 
-            _resultsCaretaker = resultsCaretaker;
+            ResultsCaretaker = resultsCaretaker;
 
-            _result = new Result();
+            Result = new Result();
+
+            var calculationXY = new CalculationXY(this);
+            var calculationResultY = new CalculationResultY(this);
+            var calculationXResult = new CalculationXResult(this);
+            var calculationResultResult = new CalculationResultResult(this);
+            var calculationUndo = new CalculationUndo(this);
+
+            calculationXY.SetSuccessor(calculationResultY);
+            calculationResultY.SetSuccessor(calculationXResult);
+            calculationXResult.SetSuccessor(calculationResultResult);
+            calculationResultResult.SetSuccessor(calculationUndo);
+
+            _calculation = calculationXY;
         }
 
-        public IResult Calculate(OperationTypes operationType, double x, double y)
+        public IResult Calculate(Request request)
         {
-            var operation = _operationsCollection.GetOperation(operationType);
-
-            _resultsCaretaker.ResultMemento = _result?.SaveResult();
-
-            var result = operation.Calculate(x, y);
-
-            _result.Value = result.Value;
-
-            return result;
-        }
-
-        public IResult Calculate(OperationTypes operationType, string side, double value)
-        {
-            if (_result == null)
-            {
-                throw new ArgumentException("Next time input numbers first, then use result");
-            }
-
-            IResult result;
-
-            if (side == ResultLeftSide)
-            {
-                result = Calculate(operationType, _result.Value, value);
-            }
-            else if (side == ResultRightSide)
-            {
-                result = Calculate(operationType, value, _result.Value);
-            }
-            else
-            {
-                throw new InvalidEnumArgumentException("Unknown side");
-            }
-
-            return result;
-        }
-
-        public IResult Calculate(OperationTypes operationType)
-        {
-            if (_result == null)
-            {
-                throw new ArgumentException("Next time input numbers first, then use result");
-            }
-
-            return Calculate(operationType, _result.Value, _result.Value);
-        }
-
-        public IResult Undo()
-        {
-            var memento = _resultsCaretaker.ResultMemento;
-
-            if (memento == null)
-            {
-                throw new ArgumentException("Next time input numbers first, then use result");
-            }
-
-            _result.Value = memento.Value;
-
-            return _result;
+            return _calculation.Calculate(request);
         }
     }
 }

@@ -7,6 +7,8 @@ using Calculator.Results;
 using Calculator.Results.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Calculator.Calculations;
+using Calculator.Calculations.Models;
 using Colors.Net;
 
 namespace Calculator
@@ -44,23 +46,41 @@ namespace Calculator
 
                     if (commands[0] == OperationTypes.Undo.ToString())
                     {
-                        result = calculator.Undo();
+                        result = calculator.Calculate(new Request
+                        {
+                            Type = operationType
+                        });
                     }
                     else if (commands[1] == "Result" && commands[2] == "Result")
                     {
-                        result = calculator.Calculate(operationType);
+                        result = calculator.Calculate(new Request
+                        {
+                            ResultLeft = true,
+                            ResultRight = true,
+                            Type = operationType
+                        });
                     }
                     else if (commands[1] == "Result")
                     {
                         var value = double.Parse(commands[2]);
 
-                        result = calculator.Calculate(operationType, "Left", value);
+                        result = calculator.Calculate(new Request
+                        {
+                            Y = value,
+                            ResultLeft = true,
+                            Type = operationType
+                        });
                     }
                     else if (commands[2] == "Result")
                     {
                         var value = double.Parse(commands[1]);
 
-                        result = calculator.Calculate(operationType, "Right", value);
+                        result = calculator.Calculate(new Request
+                        {
+                            X = value,
+                            ResultRight = true,
+                            Type = operationType
+                        });
                     }
                     else if (commands[1] != "Result" && commands[2] != "Result")
                     {
@@ -68,7 +88,12 @@ namespace Calculator
 
                         var y = double.Parse(commands[2]);
 
-                        result = calculator.Calculate(operationType, x, y);
+                        result = calculator.Calculate(new Request
+                        {
+                            X = x,
+                            Y = y,
+                            Type = operationType
+                        });
                     }
 
                     if (result == null)

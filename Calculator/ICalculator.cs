@@ -1,16 +1,18 @@
-﻿using Calculator.Operations.Helpers;
+﻿using Calculator.Calculations.Models;
+using Calculator.Operations.Collections.Interfaces;
+using Calculator.Operations.Helpers;
 using Calculator.Results.Interfaces;
 
 namespace Calculator
 {
     public interface ICalculator
     {
-        IResult Calculate(OperationTypes operationType, double x, double y);
+        IOperationsCollection OperationsCollection { get; }
 
-        IResult Calculate(OperationTypes operationType, string side, double value);
+        IResultsCaretaker ResultsCaretaker { get; }
 
-        IResult Calculate(OperationTypes operationType);
+        IResult Result { get; }
 
-        IResult Undo();
+        IResult Calculate(Request request);
     }
 }
