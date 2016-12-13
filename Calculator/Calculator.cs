@@ -3,6 +3,7 @@ using Calculator.Operations.Helpers;
 using Calculator.Results.Interfaces;
 using System;
 using System.ComponentModel;
+using Calculator.Results;
 
 namespace Calculator
 {
@@ -33,6 +34,8 @@ namespace Calculator
             _operationsCollection = operationsCollection;
 
             _resultsCaretaker = resultsCaretaker;
+
+            _result = new Result();
         }
 
         public IResult Calculate(OperationTypes operationType, double x, double y)
@@ -43,7 +46,7 @@ namespace Calculator
 
             var result = operation.Calculate(x, y);
 
-            _result = result;
+            _result.Value = result.Value;
 
             return result;
         }

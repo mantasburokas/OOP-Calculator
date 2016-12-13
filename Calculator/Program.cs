@@ -7,6 +7,7 @@ using Calculator.Results;
 using Calculator.Results.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Colors.Net;
 
 namespace Calculator
 {
@@ -18,9 +19,11 @@ namespace Calculator
 
             var calculator = services.GetService<ICalculator>();
 
+            var console = services.GetService<IConsoleAdapter>();
+
             do
             {
-                Console.WriteLine("[operation type] [x] [y]");
+                console.WriteLine("[operation type] [x] [y]", ConsoleColor.Cyan);
 
                 var input = Console.ReadLine();
 
@@ -73,9 +76,16 @@ namespace Calculator
                         throw new ArgumentNullException();
                     }
 
-                    Console.WriteLine(result.IsNull() ? "Unsupported operation" : $"Result: {result.Value}");
+                    if (result.IsNull() || result.Value == double.MinValue)
+                    {
+                        console.WriteLine("Unsupported operation", ConsoleColor.Red);
+                    }
+                    else
+                    {
+                        console.WriteLine($"Result: {result.Value}", ConsoleColor.Green); 
+                    }
 
-                    Console.WriteLine("Continue? y/n");
+                    console.WriteLine("Continue? y/n", ConsoleColor.Magenta);
                 }
 
             } while (Console.ReadKey(true).Key != ConsoleKey.N);
@@ -89,7 +99,9 @@ namespace Calculator
                 .AddSingleton<ICalculator, Calculator>()
                 .AddSingleton<IOperationsCollection, OperationsCollection>()
                 .AddSingleton<IOperationFactory, OperationFactory>()
-                .AddSingleton<IResultsCaretaker, ResultsCaretaker>();
+                .AddSingleton<IResultsCaretaker, ResultsCaretaker>()
+                .AddSingleton(new ColoredConsoleWriter(Console.Out))
+                .AddSingleton<IConsoleAdapter, ConsoleAdapter>();
 
             return services.BuildServiceProvider();
         }
